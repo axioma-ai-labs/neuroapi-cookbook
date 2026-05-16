@@ -35,7 +35,7 @@ pip install -r requirements.txt
 ## Formatting & Linting
 
 The cookbook is formatted and linted with [Ruff](https://docs.astral.sh/ruff/).
-Run both before opening a pull request — CI runs the same checks:
+Run both before opening a pull request. CI runs the same checks:
 
 ```bash
 uv run ruff format examples/   # apply formatting

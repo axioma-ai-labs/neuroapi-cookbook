@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="assets/neuroapi-cookbook.png" alt="NeuroAPI Cookbook — REST API for Financial Market Intelligence" width="100%">
+  <img src="assets/neuroapi-cookbook.png" alt="NeuroAPI Cookbook: REST API for Financial Market Intelligence" width="100%">
 </p>
 
 <h1 align="center">NeuroAPI Cookbook</h1>
 
 <p align="center">
-  Practical, runnable recipes for building with <a href="https://neuroapi.neurobro.ai/docs">NeuroAPI</a> — Neurobro's API for financial market intelligence.
+  Practical, runnable recipes for building with <a href="https://neuroapi.neurobro.ai/docs">NeuroAPI</a>, Neurobro's API for financial market intelligence.
 </p>
 
 <p align="center">
