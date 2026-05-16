@@ -16,6 +16,10 @@
 
 ---
 
+> [!NOTE]
+> Looking for pay-per-call crypto intelligence with automatic USDC micropayments?
+> See the companion [x402 API Cookbook](https://github.com/axioma-ai-labs/x402-neurobro) — an on-ramp to the broader NeuroAPI platform.
+
 Practical examples for building with [NeuroAPI](https://neuroapi.neurobro.ai/docs), Neurobro's paid public API for finance. The cookbook is intentionally small: each recipe focuses on one production pattern and can be run from a terminal or copied into an application.
 
 NeuroAPI has a compact public surface:
