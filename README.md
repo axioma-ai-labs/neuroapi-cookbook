@@ -9,7 +9,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/axioma-ai-labs/neuroapi-cookbook/actions/workflows/ci.yml"><img src="https://github.com/axioma-ai-labs/neuroapi-cookbook/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://neuroapi.neurobro.ai/docs"><img src="https://img.shields.io/badge/docs-neuroapi-2ea44f" alt="Docs"></a>
   <img src="https://img.shields.io/badge/python-3.9%2B-blue" alt="Python 3.9+">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT"></a>
