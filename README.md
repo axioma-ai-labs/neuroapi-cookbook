@@ -95,7 +95,7 @@ This repo follows the same practical pattern as the major API cookbooks:
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). New examples should be self-contained, finance-relevant, and safe to run with a real API key. Examples are formatted and linted with [Ruff](https://docs.astral.sh/ruff/); CI runs `ruff check` and `ruff format --check` on every pull request.
+See [CONTRIBUTING.md](CONTRIBUTING.md). New examples should be self-contained, finance-relevant, and safe to run with a real API key.
 
 ## License
 
