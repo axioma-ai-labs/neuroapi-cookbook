@@ -24,6 +24,7 @@ NeuroAPI has a compact public surface:
 - `POST /api/v1/agent/ask` asks the agent and returns either one JSON response or a Server-Sent Events stream.
 - Authentication uses `X-API-Key`, not bearer tokens.
 - The caller owns conversation state through `message_history`.
+- `system_prompt` layers caller instructions on top of the agent persona; `output_schema` (JSON Schema, sync only) returns a validated object in `output`.
 - `usage.cost_units` is the billing contract for successful `/agent/ask` calls.
 
 ## Start Here
@@ -59,6 +60,7 @@ python3 examples/01_getting_started.py
 | [03_streaming_sse.py](examples/03_streaming_sse.py) | Stream an answer over Server-Sent Events and render answer chunks as they arrive. |
 | [04_resilient_client.py](examples/04_resilient_client.py) | Wrap `/agent/ask` with retry handling for `429` and `503`, `Retry-After`, idempotency keys, and structured errors. |
 | [05_structured_market_report.py](examples/05_structured_market_report.py) | Ask for constrained JSON and validate the answer with Pydantic before using it downstream. |
+| [06_scheduled_signal_to_mt5.py](examples/06_scheduled_signal_to_mt5.py) | Run on a CET schedule, combine `system_prompt` + `output_schema` for a validated trade signal, and gate it into a MetaTrader 5 (Fusion Markets) placeholder. |
 
 See [examples/README.md](examples/README.md) for usage notes and extension ideas.
 

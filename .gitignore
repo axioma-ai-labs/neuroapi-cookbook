@@ -2,6 +2,13 @@
 .env
 .env.*
 !.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*credentials*.json
+*secret*
+*token*
 .venv/
 __pycache__/
 *.py[cod]
@@ -9,3 +16,4 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+AGENTS.md

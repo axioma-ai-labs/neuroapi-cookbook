@@ -19,6 +19,7 @@ The examples target `https://api.neurobro.ai/api/v1` by default. Set `NEUROAPI_B
 | [03_streaming_sse.py](03_streaming_sse.py) | Show long answers incrementally in a terminal or UI. |
 | [04_resilient_client.py](04_resilient_client.py) | Put retry, error, and idempotency behavior behind a small client wrapper. |
 | [05_structured_market_report.py](05_structured_market_report.py) | Convert natural-language analysis into validated application data. |
+| [06_scheduled_signal_to_mt5.py](06_scheduled_signal_to_mt5.py) | Run unattended on a CET schedule, get a schema-validated trade signal, and hand it to a broker placeholder. |
 
 ## Production Notes
 
@@ -29,3 +30,6 @@ The examples target `https://api.neurobro.ai/api/v1` by default. Set `NEUROAPI_B
 - Retry only `429` and `503` by default. Honor `Retry-After` and cap attempts.
 - Use `Idempotency-Key` for sync `/agent/ask` retries representing the same logical operation. Streaming responses are not cached.
 - Treat model-formatted JSON as untrusted until your code validates it.
+- `output_schema` requires `stream=false`. The validated object is returned in `output` (and `answer` is `null`). `mode="max"` gives provider-enforced conformance; `fast`/`smart` are best-effort with retries.
+- `system_prompt` augments the agent; it cannot override its persona or safety guardrails.
+- Re-validate structured output locally before acting on it, especially before anything that moves money. Keep real-money side effects opt-in and off by default.
