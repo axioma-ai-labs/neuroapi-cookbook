@@ -3,10 +3,11 @@ name = "neuroapi-cookbook"
 version = "0.1.0"
 description = "Practical examples for building with NeuroAPI."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "MIT"
 dependencies = [
   "httpx>=0.27.0",
+  "mcp>=1.2.0",
   "python-dotenv>=1.0.1",
   "pydantic>=2.7.0",
 ]
@@ -18,14 +19,14 @@ dev = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 # E/W: pycodestyle, F: pyflakes, I: import sorting, UP: pyupgrade,
 # B: bugbear, SIM: simplify, RUF: ruff-specific rules.
 select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF"]
-# SIM117: nested `with` is kept for readability; parenthesized context
-# managers are awkward on the 3.9 target this cookbook supports.
+# SIM117: nested `with` blocks are kept for readability over a single
+# parenthesized context manager.
 ignore = ["SIM117"]
 
 [tool.ruff.format]
