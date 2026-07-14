@@ -21,7 +21,10 @@ from mcp.client.streamable_http import streamablehttp_client
 load_dotenv()
 
 BASE_URL = os.getenv("NEUROAPI_BASE_URL", "https://api.neurobro.ai/api/v1").rstrip("/")
-MCP_URL = f"{BASE_URL}/mcp"
+# Trailing slash is intentional: it hits the endpoint directly and avoids a
+# redirect that some TLS-terminating proxies answer over http, which would
+# turn the POST into a GET.
+MCP_URL = f"{BASE_URL}/mcp/"
 API_KEY = os.getenv("NEUROAPI_KEY")
 
 PROMPT = (
