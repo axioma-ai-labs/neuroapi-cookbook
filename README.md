@@ -26,6 +26,79 @@ NeuroAPI has a compact public surface:
 - The caller owns conversation state through `message_history`.
 - `system_prompt` layers caller instructions on top of the agent persona; `output_schema` (JSON Schema, sync only) returns a validated object in `output`.
 - `usage.cost_units` is the billing contract for successful `/agent/ask` calls.
+- The same agent is available as the MCP tool `ask_neuroapi`.
+
+## MCP
+
+Point any MCP client at the remote Streamable HTTP server. One tool is exposed: `ask_neuroapi`. It takes the same fields as a non-streaming `POST /agent/ask` (`prompt`, optional `mode`, `message_history`, `system_prompt`, `output_schema`).
+
+```text
+https://api.neurobro.ai/api/v1/mcp
+```
+
+Send the dashboard key in the `X-API-Key` header. On this endpoint only, `Authorization: Bearer` is also accepted. Do not put the key in the URL.
+
+### Claude Code
+
+```bash
+claude mcp add --transport http neuroapi https://api.neurobro.ai/api/v1/mcp \
+  --header "X-API-Key: $NEUROAPI_KEY"
+```
+
+Or save this as `.mcp.json` in the project root ([examples/mcp/claude-code.mcp.json](examples/mcp/claude-code.mcp.json)). Claude Code expands `${NEUROAPI_KEY}`:
+
+```json
+{
+  "mcpServers": {
+    "neuroapi": {
+      "type": "http",
+      "url": "https://api.neurobro.ai/api/v1/mcp",
+      "headers": { "X-API-Key": "${NEUROAPI_KEY}" }
+    }
+  }
+}
+```
+
+### Cursor
+
+Save this as `~/.cursor/mcp.json` or `.cursor/mcp.json` ([examples/mcp/cursor.mcp.json](examples/mcp/cursor.mcp.json)). Cursor expands `${env:NEUROAPI_KEY}`:
+
+```json
+{
+  "mcpServers": {
+    "neuroapi": {
+      "url": "https://api.neurobro.ai/api/v1/mcp",
+      "headers": { "X-API-Key": "${env:NEUROAPI_KEY}" }
+    }
+  }
+}
+```
+
+### VS Code
+
+Save this as `.vscode/mcp.json` ([examples/mcp/vscode.mcp.json](examples/mcp/vscode.mcp.json)). `type` must be `"http"`. VS Code prompts for the key and stores it as a secret:
+
+```json
+{
+  "servers": {
+    "neuroapi": {
+      "type": "http",
+      "url": "https://api.neurobro.ai/api/v1/mcp",
+      "headers": { "X-API-Key": "${input:neuroapi-key}" }
+    }
+  },
+  "inputs": [
+    {
+      "id": "neuroapi-key",
+      "type": "promptString",
+      "description": "NeuroAPI API key",
+      "password": true
+    }
+  ]
+}
+```
+
+Copy-paste files and the Python client notes are in [examples/mcp/README.md](examples/mcp/README.md). Guide: [Connect a client](https://neuroapi.neurobro.ai/docs/mcp/clients).
 
 ## Start Here
 
@@ -61,6 +134,13 @@ python3 examples/01_getting_started.py
 | [04_resilient_client.py](examples/04_resilient_client.py) | Wrap `/agent/ask` with retry handling for `429` and `503`, `Retry-After`, idempotency keys, and structured errors. |
 | [05_structured_market_report.py](examples/05_structured_market_report.py) | Ask for constrained JSON and validate the answer with Pydantic before using it downstream. |
 | [06_scheduled_signal_to_mt5.py](examples/06_scheduled_signal_to_mt5.py) | Run on a CET schedule, combine `system_prompt` + `output_schema` for a validated trade signal, and gate it into a MetaTrader 5 (Fusion Markets) placeholder. |
+| [07_fast_and_smart.py](examples/07_fast_and_smart.py) | Send one prompt to `mode=fast` and `mode=smart`. |
+| [08_output_schema.py](examples/08_output_schema.py) | Pass a JSON Schema as `output_schema` and validate `output` with Pydantic. |
+| [ts/agent_ask.ts](examples/ts/agent_ask.ts) | Sync `POST /agent/ask` from TypeScript. |
+| [ts/message_history.ts](examples/ts/message_history.ts) | Multi-turn TypeScript chat. Resend prior turns in `message_history`. |
+| [mcp/](examples/mcp/README.md) | Claude Code, Cursor, and VS Code configs for `https://api.neurobro.ai/api/v1/mcp`. |
+| [09_mcp_client.py](examples/09_mcp_client.py) | Call `ask_neuroapi` from the Python MCP SDK. Python 3.10+. |
+| [10_pydantic_ai_mcp.py](examples/10_pydantic_ai_mcp.py) | Attach the MCP server to a Pydantic AI agent. Python 3.11+. |
 
 See [examples/README.md](examples/README.md) for usage notes and extension ideas.
 
@@ -84,6 +164,8 @@ Never hardcode API keys in notebooks, scripts, issue reports, or commits. The fu
 - [Billing](https://neuroapi.neurobro.ai/docs/guides/billing)
 - [Errors](https://neuroapi.neurobro.ai/docs/guides/errors)
 - [API reference](https://neuroapi.neurobro.ai/docs/api)
+- [MCP](https://neuroapi.neurobro.ai/docs/mcp)
+- [MCP clients](https://neuroapi.neurobro.ai/docs/mcp/clients)
 
 ## Cookbook Style
 

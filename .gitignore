@@ -10,6 +10,7 @@
 *secret*
 *token*
 .venv/
+node_modules/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/

@@ -1,0 +1,13 @@
+{
+  "name": "neuroapi-cookbook-ts",
+  "private": true,
+  "type": "module",
+  "description": "TypeScript recipes for POST /agent/ask. No runtime dependencies.",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "typescript": "^5.9.0"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "neuroapi": {
+      "url": "https://api.neurobro.ai/api/v1/mcp",
+      "headers": { "X-API-Key": "${env:NEUROAPI_KEY}" }
+    }
+  }
+}

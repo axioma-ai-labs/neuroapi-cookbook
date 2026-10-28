@@ -1,0 +1,17 @@
+{
+  "servers": {
+    "neuroapi": {
+      "type": "http",
+      "url": "https://api.neurobro.ai/api/v1/mcp",
+      "headers": { "X-API-Key": "${input:neuroapi-key}" }
+    }
+  },
+  "inputs": [
+    {
+      "id": "neuroapi-key",
+      "type": "promptString",
+      "description": "NeuroAPI API key",
+      "password": true
+    }
+  ]
+}

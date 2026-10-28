@@ -44,6 +44,14 @@ uv run ruff check examples/    # report lint issues (add --fix to auto-fix)
 
 Configuration lives in `pyproject.toml` under `[tool.ruff]`.
 
+TypeScript recipes in `examples/ts` typecheck with `tsc`:
+
+```bash
+cd examples/ts
+npm ci
+npx tsc --noEmit
+```
+
 ## Adding an Example
 
 Place new examples in `examples/` with a numbered filename:
