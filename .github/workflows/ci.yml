@@ -27,20 +27,3 @@ jobs:
 
       - name: Byte-compile examples
         run: uv run python -m compileall -q examples/
-
-  typescript:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Install TypeScript example dependencies
-        working-directory: examples/ts
-        run: npm ci
-
-      - name: Typecheck
-        working-directory: examples/ts
-        run: npx tsc --noEmit

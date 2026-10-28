@@ -38,67 +38,13 @@ https://api.neurobro.ai/api/v1/mcp
 
 Send the dashboard key in the `X-API-Key` header. On this endpoint only, `Authorization: Bearer` is also accepted. Do not put the key in the URL.
 
-### Claude Code
+| Client | Config |
+| --- | --- |
+| Claude Code | [examples/mcp/claude-code.mcp.json](examples/mcp/claude-code.mcp.json). Or `claude mcp add --transport http neuroapi https://api.neurobro.ai/api/v1/mcp --header "X-API-Key: $NEUROAPI_KEY"`. |
+| Cursor | [examples/mcp/cursor.mcp.json](examples/mcp/cursor.mcp.json) as `~/.cursor/mcp.json` or `.cursor/mcp.json`. |
+| VS Code | [examples/mcp/vscode.mcp.json](examples/mcp/vscode.mcp.json) as `.vscode/mcp.json`. |
 
-```bash
-claude mcp add --transport http neuroapi https://api.neurobro.ai/api/v1/mcp \
-  --header "X-API-Key: $NEUROAPI_KEY"
-```
-
-Or save this as `.mcp.json` in the project root ([examples/mcp/claude-code.mcp.json](examples/mcp/claude-code.mcp.json)). Claude Code expands `${NEUROAPI_KEY}`:
-
-```json
-{
-  "mcpServers": {
-    "neuroapi": {
-      "type": "http",
-      "url": "https://api.neurobro.ai/api/v1/mcp",
-      "headers": { "X-API-Key": "${NEUROAPI_KEY}" }
-    }
-  }
-}
-```
-
-### Cursor
-
-Save this as `~/.cursor/mcp.json` or `.cursor/mcp.json` ([examples/mcp/cursor.mcp.json](examples/mcp/cursor.mcp.json)). Cursor expands `${env:NEUROAPI_KEY}`:
-
-```json
-{
-  "mcpServers": {
-    "neuroapi": {
-      "url": "https://api.neurobro.ai/api/v1/mcp",
-      "headers": { "X-API-Key": "${env:NEUROAPI_KEY}" }
-    }
-  }
-}
-```
-
-### VS Code
-
-Save this as `.vscode/mcp.json` ([examples/mcp/vscode.mcp.json](examples/mcp/vscode.mcp.json)). `type` must be `"http"`. VS Code prompts for the key and stores it as a secret:
-
-```json
-{
-  "servers": {
-    "neuroapi": {
-      "type": "http",
-      "url": "https://api.neurobro.ai/api/v1/mcp",
-      "headers": { "X-API-Key": "${input:neuroapi-key}" }
-    }
-  },
-  "inputs": [
-    {
-      "id": "neuroapi-key",
-      "type": "promptString",
-      "description": "NeuroAPI API key",
-      "password": true
-    }
-  ]
-}
-```
-
-Copy-paste files and the Python client notes are in [examples/mcp/README.md](examples/mcp/README.md). Guide: [Connect a client](https://neuroapi.neurobro.ai/docs/mcp/clients).
+Notes for those files and the Python client are in [examples/mcp/README.md](examples/mcp/README.md). Guide: [Connect a client](https://neuroapi.neurobro.ai/docs/mcp/clients).
 
 ## Start Here
 
@@ -136,11 +82,8 @@ python3 examples/01_getting_started.py
 | [06_scheduled_signal_to_mt5.py](examples/06_scheduled_signal_to_mt5.py) | Run on a CET schedule, combine `system_prompt` + `output_schema` for a validated trade signal, and gate it into a MetaTrader 5 (Fusion Markets) placeholder. |
 | [07_fast_and_smart.py](examples/07_fast_and_smart.py) | Send one prompt to `mode=fast` and `mode=smart`. |
 | [08_output_schema.py](examples/08_output_schema.py) | Pass a JSON Schema as `output_schema` and validate `output` with Pydantic. |
-| [ts/agent_ask.ts](examples/ts/agent_ask.ts) | Sync `POST /agent/ask` from TypeScript. |
-| [ts/message_history.ts](examples/ts/message_history.ts) | Multi-turn TypeScript chat. Resend prior turns in `message_history`. |
-| [mcp/](examples/mcp/README.md) | Claude Code, Cursor, and VS Code configs for `https://api.neurobro.ai/api/v1/mcp`. |
+| [mcp/](examples/mcp/README.md) | Claude Code, Cursor, and VS Code configs for the remote MCP server. |
 | [09_mcp_client.py](examples/09_mcp_client.py) | Call `ask_neuroapi` from the Python MCP SDK. Python 3.10+. |
-| [10_pydantic_ai_mcp.py](examples/10_pydantic_ai_mcp.py) | Attach the MCP server to a Pydantic AI agent. Python 3.11+. |
 
 See [examples/README.md](examples/README.md) for usage notes and extension ideas.
 
