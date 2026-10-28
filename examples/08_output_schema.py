@@ -1,11 +1,11 @@
 """Ask for a JSON object with output_schema.
 
-`output_schema` is a JSON Schema with an object root. The validated object
-comes back on `output`, and `answer` is null. Structured output is
-non-streaming, so this recipe sends `stream: false`.
+`output_schema` is a JSON Schema with an object root. The object comes back
+on `output`, and `answer` is null. This recipe sends `stream: false`, which
+`output_schema` requires.
 
-`smart` checks the object and retries when it does not match. Re-validate
-locally before using the result.
+Validate `output` locally before using it. Structured calls usually take
+10-60 seconds, so the client timeout is 120 seconds.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ BASE_URL = os.getenv("NEUROAPI_BASE_URL", "https://api.neurobro.ai/api/v1").rstr
 API_KEY = os.getenv("NEUROAPI_KEY")
 
 # Object root, every property required, additionalProperties false.
-# Descriptions steer the agent. They are not enforced as formats.
+# Descriptions guide the agent. They are not checked.
 OUTPUT_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {

@@ -1,3 +1,0 @@
-# Python 3.10+. Install into the environment you use to run examples/09_mcp_client.py.
-# Kept separate from the cookbook's Python 3.9 requirements.
-mcp>=2.3,<3

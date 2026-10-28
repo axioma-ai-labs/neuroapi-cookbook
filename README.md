@@ -22,7 +22,7 @@ NeuroAPI has a compact public surface:
 
 - `GET /api/v1/health` verifies your API key without consuming billable units.
 - `POST /api/v1/agent/ask` asks the agent and returns either one JSON response or a Server-Sent Events stream.
-- Authentication uses `X-API-Key`, not bearer tokens.
+- REST authentication uses `X-API-Key`.
 - The caller owns conversation state through `message_history`.
 - `system_prompt` layers caller instructions on top of the agent persona; `output_schema` (JSON Schema, sync only) returns a validated object in `output`.
 - `usage.cost_units` is the billing contract for successful `/agent/ask` calls.
@@ -44,7 +44,7 @@ Send the dashboard key in the `X-API-Key` header. On this endpoint only, `Author
 | Cursor | [examples/mcp/cursor.mcp.json](examples/mcp/cursor.mcp.json) as `~/.cursor/mcp.json` or `.cursor/mcp.json`. |
 | VS Code | [examples/mcp/vscode.mcp.json](examples/mcp/vscode.mcp.json) as `.vscode/mcp.json`. |
 
-Notes for those files and the Python client are in [examples/mcp/README.md](examples/mcp/README.md). Guide: [Connect a client](https://neuroapi.neurobro.ai/docs/mcp/clients).
+Copy-paste notes are in [examples/mcp/README.md](examples/mcp/README.md). Guide: [Connect a client](https://neuroapi.neurobro.ai/docs/mcp/clients).
 
 ## Start Here
 
@@ -83,7 +83,6 @@ python3 examples/01_getting_started.py
 | [07_fast_and_smart.py](examples/07_fast_and_smart.py) | Send one prompt to `mode=fast` and `mode=smart`. |
 | [08_output_schema.py](examples/08_output_schema.py) | Pass a JSON Schema as `output_schema` and validate `output` with Pydantic. |
 | [mcp/](examples/mcp/README.md) | Claude Code, Cursor, and VS Code configs for the remote MCP server. |
-| [09_mcp_client.py](examples/09_mcp_client.py) | Call `ask_neuroapi` from the Python MCP SDK. Python 3.10+. |
 
 See [examples/README.md](examples/README.md) for usage notes and extension ideas.
 

@@ -2,7 +2,7 @@
 
 `mode` is optional and defaults to `smart`. This recipe sets it explicitly
 twice, with the same prompt, so the only thing that changes is the tier.
-The response `mode` field is the tier that actually served the call.
+The response includes `mode`.
 """
 
 from __future__ import annotations
