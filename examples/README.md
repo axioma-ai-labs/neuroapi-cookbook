@@ -20,6 +20,9 @@ The examples target `https://api.neurobro.ai/api/v1` by default. Set `NEUROAPI_B
 | [04_resilient_client.py](04_resilient_client.py) | Put retry, error, and idempotency behavior behind a small client wrapper. |
 | [05_structured_market_report.py](05_structured_market_report.py) | Convert natural-language analysis into validated application data. |
 | [06_scheduled_signal_to_mt5.py](06_scheduled_signal_to_mt5.py) | Run unattended on a CET schedule, get a schema-validated trade signal, and hand it to a broker placeholder. |
+| [07_fast_and_smart.py](07_fast_and_smart.py) | Compare `fast` and `smart` on one prompt. Two `/agent/ask` calls. |
+| [08_output_schema.py](08_output_schema.py) | Return a validated object in `output` from a JSON Schema. `stream` is false. |
+| [mcp/](mcp/README.md) | Paste the Claude Code, Cursor, or VS Code config. |
 
 ## Production Notes
 
@@ -30,6 +33,7 @@ The examples target `https://api.neurobro.ai/api/v1` by default. Set `NEUROAPI_B
 - Retry only `429` and `503` by default. Honor `Retry-After` and cap attempts.
 - Use `Idempotency-Key` for sync `/agent/ask` retries representing the same logical operation. Streaming responses are not cached.
 - Treat model-formatted JSON as untrusted until your code validates it.
-- `output_schema` requires `stream=false`. The validated object is returned in `output` (and `answer` is `null`). `mode="max"` gives provider-enforced conformance; `fast`/`smart` are best-effort with retries.
+- `output_schema` requires `stream=false`. The object is returned in `output` and `answer` is `null`. On `max`, a schema with every property required and `additionalProperties: false` is enforced by the provider while the answer is written.
 - `system_prompt` augments the agent; it cannot override its persona or safety guardrails.
 - Re-validate structured output locally before acting on it, especially before anything that moves money. Keep real-money side effects opt-in and off by default.
+- MCP tool calls are non-streaming. `ask_neuroapi` accepts `prompt`, `mode`, `message_history`, `system_prompt`, and `output_schema`. The server URL is `https://api.neurobro.ai/api/v1/mcp`.
