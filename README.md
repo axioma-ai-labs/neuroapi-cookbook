@@ -1,133 +1,129 @@
 <p align="center">
-  <img src="assets/neuroapi-cookbook.png" alt="NeuroAPI Cookbook: REST API for Financial Market Intelligence" width="100%">
+  <img src="assets/neuroapi-cookbook.png" alt="NeuroAPI Cookbook: runnable recipes for the crypto and financial market research API" width="100%">
 </p>
 
 <h1 align="center">NeuroAPI Cookbook</h1>
 
 <p align="center">
-  Practical, runnable recipes for building with <a href="https://neuroapi.neurobro.ai/docs">NeuroAPI</a>, Neurobro's API for financial market intelligence.
+  Runnable Python recipes for <a href="https://neuroapi.neurobro.ai">NeuroAPI</a>, the crypto and financial market research API by Neurobro.
 </p>
 
 <p align="center">
-  <a href="https://neuroapi.neurobro.ai/docs"><img src="https://img.shields.io/badge/docs-neuroapi-2ea44f" alt="Docs"></a>
+  <a href="https://neuroapi.neurobro.ai/docs"><img src="https://img.shields.io/badge/docs-NeuroAPI-dc2626" alt="Docs"></a>
   <img src="https://img.shields.io/badge/python-3.9%2B-blue" alt="Python 3.9+">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT"></a>
 </p>
 
 ---
 
-Practical examples for building with [NeuroAPI](https://neuroapi.neurobro.ai/docs), Neurobro's paid public API for finance. The cookbook is intentionally small: each recipe focuses on one production pattern and can be run from a terminal or copied into an application.
+NeuroAPI answers research questions about crypto, stocks, forex, commodities, and macro. Ask about any coin, stock, or macro trend and get a researched answer, streamed or as validated JSON. Each recipe here covers one production pattern, runs from a terminal, and is short enough to copy into your own app.
 
-NeuroAPI has a compact public surface:
+## The API in one minute
 
-- `GET /api/v1/health` verifies your API key without consuming billable units.
-- `POST /api/v1/agent/ask` asks the agent and returns either one JSON response or a Server-Sent Events stream.
-- REST authentication uses `X-API-Key`.
-- The caller owns conversation state through `message_history`.
-- `system_prompt` layers caller instructions on top of the agent persona; `output_schema` (JSON Schema, sync only) returns a validated object in `output`.
-- `usage.cost_units` is the billing contract for successful `/agent/ask` calls.
-- The same agent is available as the MCP tool `ask_neuroapi`.
+| What | How |
+| --- | --- |
+| Check your key | `GET /api/v1/health` is free and never debits your quota. |
+| Ask a question | `POST /api/v1/agent/ask` returns one JSON response, or a Server-Sent Events stream with `stream: true`. |
+| Authenticate | Send your key in the `X-API-Key` header. |
+| Keep context | You own the conversation: resend earlier turns in `message_history`. |
+| Shape the answer | `system_prompt` adds your instructions. `output_schema` (a JSON Schema, non-streaming only) returns a validated object in `output`. |
+| Pick the depth | `mode` is `fast` (1 unit), `smart` (2 units, the default), or `max` (8 units, Pro and Enterprise). |
+| Know the cost | `usage.cost_units` on each successful response is what that call debited. |
+| Use it from an agent | The same research is the MCP tool `ask_neuroapi`. |
 
-## MCP
+## Plans
 
-Point any MCP client at the remote Streamable HTTP server. One tool is exposed: `ask_neuroapi`. It takes the same fields as a non-streaming `POST /agent/ask` (`prompt`, optional `mode`, `message_history`, `system_prompt`, `output_schema`).
+Every plan includes REST, streaming, JSON output, and the MCP server.
+
+| Plan | Price | Monthly quota | Modes |
+| --- | --- | --- | --- |
+| Starter | $49 / month | 10,000 cost units | `fast`, `smart` |
+| Pro | $299 / month | 100,000 cost units | `fast`, `smart`, `max` |
+| Enterprise | Custom | from 1,000,000 cost units | `fast`, `smart`, `max` |
+
+Rate limits, key caps, and what counts against your quota are on the [pricing page](https://neuroapi.neurobro.ai/docs/pricing).
+
+## Quickstart
+
+1. Create an API key in the [NeuroAPI dashboard](https://neuroapi.neurobro.ai/). The key needs an active plan.
+2. Copy `.env.example` to `.env` and set `NEUROAPI_KEY`.
+3. Install the dependencies:
+
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+   Or, with `uv`:
+
+   ```bash
+   uv sync
+   ```
+
+4. Run the first recipe:
+
+   ```bash
+   python3 examples/01_getting_started.py
+   ```
+
+## Recipes
+
+| Recipe | What you build |
+| --- | --- |
+| [01_getting_started.py](examples/01_getting_started.py) | Verify a key with `/health`, make one `/agent/ask` call, and read `usage` and `X-Request-Id`. |
+| [02_multi_turn_research_chat.py](examples/02_multi_turn_research_chat.py) | A stateless research chat that resends earlier turns in `message_history`. |
+| [03_streaming_sse.py](examples/03_streaming_sse.py) | Stream an answer over Server-Sent Events and print chunks as they arrive. |
+| [04_resilient_client.py](examples/04_resilient_client.py) | Retry `429` and `503` with `Retry-After`, send idempotency keys, and handle structured errors. |
+| [05_structured_market_report.py](examples/05_structured_market_report.py) | Ask for constrained JSON and validate it with Pydantic before using it downstream. |
+| [06_scheduled_signal_to_mt5.py](examples/06_scheduled_signal_to_mt5.py) | Run on a CET schedule, combine `system_prompt` and `output_schema` into a validated trade signal, and pass it to a MetaTrader 5 (Fusion Markets) placeholder. |
+| [07_fast_and_smart.py](examples/07_fast_and_smart.py) | Send one prompt to `mode=fast` and `mode=smart` and compare the answers. |
+| [08_output_schema.py](examples/08_output_schema.py) | Pass a JSON Schema as `output_schema` and validate `output` with Pydantic. |
+| [mcp/](examples/mcp/README.md) | Claude Code, Cursor, and VS Code configs for the remote MCP server. |
+
+[examples/README.md](examples/README.md) has usage notes and ideas for extending each recipe.
+
+## Use it from your AI agent (MCP)
+
+Point any MCP client at the remote server. It speaks Streamable HTTP and exposes one tool, `ask_neuroapi`, which takes the same fields as a non-streaming `POST /agent/ask`: `prompt`, plus optional `mode`, `message_history`, `system_prompt`, and `output_schema`.
 
 ```text
 https://api.neurobro.ai/api/v1/mcp
 ```
 
-Send the dashboard key in the `X-API-Key` header. On this endpoint only, `Authorization: Bearer` is also accepted. Do not put the key in the URL.
+Send your key in the `X-API-Key` header. On this endpoint only, `Authorization: Bearer` also works for clients with just a token field. Never put the key in the URL.
 
-| Client | Config |
+| Client | Setup |
 | --- | --- |
-| Claude Code | [examples/mcp/claude-code.mcp.json](examples/mcp/claude-code.mcp.json). Or `claude mcp add --transport http neuroapi https://api.neurobro.ai/api/v1/mcp --header "X-API-Key: $NEUROAPI_KEY"`. |
-| Cursor | [examples/mcp/cursor.mcp.json](examples/mcp/cursor.mcp.json) as `~/.cursor/mcp.json` or `.cursor/mcp.json`. |
-| VS Code | [examples/mcp/vscode.mcp.json](examples/mcp/vscode.mcp.json) as `.vscode/mcp.json`. |
+| Claude Code | `claude mcp add --transport http neuroapi https://api.neurobro.ai/api/v1/mcp --header "X-API-Key: $NEUROAPI_KEY"`, or [claude-code.mcp.json](examples/mcp/claude-code.mcp.json) as `.mcp.json`. |
+| Cursor | [cursor.mcp.json](examples/mcp/cursor.mcp.json) as `~/.cursor/mcp.json` or `.cursor/mcp.json`. |
+| VS Code | [vscode.mcp.json](examples/mcp/vscode.mcp.json) as `.vscode/mcp.json`. |
 
-Copy-paste notes are in [examples/mcp/README.md](examples/mcp/README.md). Guide: [Connect a client](https://neuroapi.neurobro.ai/docs/mcp/clients).
-
-## Start Here
-
-1. Create an API key in the [NeuroAPI dashboard](https://neuroapi.neurobro.ai/).
-2. Copy `.env.example` to `.env` and set `NEUROAPI_KEY`.
-3. Install dependencies:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-If you use `uv`:
-
-```bash
-uv sync
-```
-
-Run the first example:
-
-```bash
-python3 examples/01_getting_started.py
-```
-
-## Examples
-
-| Example | What it demonstrates |
-| --- | --- |
-| [01_getting_started.py](examples/01_getting_started.py) | Verify a key with `/health`, make a sync `/agent/ask` call, inspect `usage` and `X-Request-Id`. |
-| [02_multi_turn_research_chat.py](examples/02_multi_turn_research_chat.py) | Build a stateless research chat by resending prior turns with `message_history`. |
-| [03_streaming_sse.py](examples/03_streaming_sse.py) | Stream an answer over Server-Sent Events and render answer chunks as they arrive. |
-| [04_resilient_client.py](examples/04_resilient_client.py) | Wrap `/agent/ask` with retry handling for `429` and `503`, `Retry-After`, idempotency keys, and structured errors. |
-| [05_structured_market_report.py](examples/05_structured_market_report.py) | Ask for constrained JSON and validate the answer with Pydantic before using it downstream. |
-| [06_scheduled_signal_to_mt5.py](examples/06_scheduled_signal_to_mt5.py) | Run on a CET schedule, combine `system_prompt` + `output_schema` for a validated trade signal, and gate it into a MetaTrader 5 (Fusion Markets) placeholder. |
-| [07_fast_and_smart.py](examples/07_fast_and_smart.py) | Send one prompt to `mode=fast` and `mode=smart`. |
-| [08_output_schema.py](examples/08_output_schema.py) | Pass a JSON Schema as `output_schema` and validate `output` with Pydantic. |
-| [mcp/](examples/mcp/README.md) | Claude Code, Cursor, and VS Code configs for the remote MCP server. |
-
-See [examples/README.md](examples/README.md) for usage notes and extension ideas.
+Claude Desktop and other clients: see [Connect a client](https://neuroapi.neurobro.ai/docs/mcp/clients). For ready-made agent skills, see [neurobro-skills](https://github.com/axioma-ai-labs/neurobro-skills).
 
 ## Configuration
 
-All examples read these environment variables:
+Every recipe reads these environment variables:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `NEUROAPI_KEY` | required | Your API key, created in the NeuroAPI dashboard. |
+| `NEUROAPI_KEY` | required | Your API key from the NeuroAPI dashboard. |
 | `NEUROAPI_BASE_URL` | `https://api.neurobro.ai/api/v1` | Override for staging, local development, or tests. |
 
-Never hardcode API keys in notebooks, scripts, issue reports, or commits. The full key is shown only once in the dashboard.
+The dashboard shows the full key once. Keep it in `.env` or a secret manager, never in notebooks, scripts, issues, or commits.
 
-## API References
+## Docs
 
-- [NeuroAPI docs](https://neuroapi.neurobro.ai/docs)
-- [Quickstart](https://neuroapi.neurobro.ai/docs/quickstart)
-- [Authentication](https://neuroapi.neurobro.ai/docs/guides/authentication)
-- [Rate limits](https://neuroapi.neurobro.ai/docs/guides/rate-limits)
-- [Billing](https://neuroapi.neurobro.ai/docs/guides/billing)
-- [Errors](https://neuroapi.neurobro.ai/docs/guides/errors)
-- [API reference](https://neuroapi.neurobro.ai/docs/api)
-- [MCP](https://neuroapi.neurobro.ai/docs/mcp)
-- [MCP clients](https://neuroapi.neurobro.ai/docs/mcp/clients)
+- [NeuroAPI docs](https://neuroapi.neurobro.ai/docs) and [quickstart](https://neuroapi.neurobro.ai/docs/quickstart)
+- Guides: [authentication](https://neuroapi.neurobro.ai/docs/guides/authentication), [rate limits](https://neuroapi.neurobro.ai/docs/guides/rate-limits), [billing](https://neuroapi.neurobro.ai/docs/guides/billing), [errors](https://neuroapi.neurobro.ai/docs/guides/errors), [idempotency](https://neuroapi.neurobro.ai/docs/guides/idempotency)
+- [API reference](https://neuroapi.neurobro.ai/docs/api) and [pricing](https://neuroapi.neurobro.ai/docs/pricing)
+- [MCP server](https://neuroapi.neurobro.ai/docs/mcp) and [MCP clients](https://neuroapi.neurobro.ai/docs/mcp/clients)
 
-## Cookbook Style
-
-This repo follows the same practical pattern as the major API cookbooks:
-
-- Root README as the navigation map.
-- Small, runnable examples instead of framework-heavy demos.
-- Environment variables for secrets.
-- Clear production notes for state, streaming, retries, cost, and validation.
-- Contributions focused on complete recipes that developers can run end to end.
-
-## Related
-
-> [!NOTE]
-> Looking for pay-per-call crypto intelligence with automatic USDC micropayments?
-> See the companion [x402 API Cookbook](https://github.com/axioma-ai-labs/x402-neurobro), an on-ramp to the broader NeuroAPI platform.
+NeuroAPI answers are AI research, not financial advice. They can be wrong, and you decide what to do with them.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). New examples should be self-contained, finance-relevant, and safe to run with a real API key.
+See [CONTRIBUTING.md](CONTRIBUTING.md). A new recipe should be self-contained, about financial markets, and safe to run with a real API key.
 
 ## License
 
